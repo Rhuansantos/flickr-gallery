@@ -1,0 +1,17 @@
+.gallery{
+    margin-top: 130px;
+    ul{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: baseline;
+        align-content: space-between;
+        li{
+            width: 30%;
+            height: 200px;
+            margin-bottom: 50px;
+            background: blueviolet;
+            list-style-type: none;
+        }
+    }
+}
