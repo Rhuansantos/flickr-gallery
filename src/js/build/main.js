@@ -26,7 +26,24 @@ var Gallery = function () {
 
   function Gallery() {
     _classCallCheck(this, Gallery);
+
+    this.request().then(function (data) {
+      return data;
+    });
   }
+
+  _createClass(Gallery, [{
+    key: 'request',
+    value: async function request() {
+      try {
+        var flickrApi = await fetch('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=12c6658dd3fc36b164fee653181086e4&text=garden&per_page=25&page=&format=json&nojsoncallback=1&auth_token=72157662469806357-7999e1dbe0d1fb6c&api_sig=6191a1acee2b8e4374ec6afd94a7ce60');
+        var data = await flickrApi.json();
+        return data;
+      } catch (e) {
+        return e;
+      }
+    }
+  }]);
 
   return Gallery;
 }();
