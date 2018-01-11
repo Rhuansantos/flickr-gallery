@@ -19,36 +19,63 @@ var Gallery = function () {
   _createClass(Gallery, null, [{
     key: 'getInstance',
 
-    // singleton design pattern
-    value: function getInstance() {
+    /**
+     * @static
+     * @param {String} _apiKey 
+     * @param {any} params 
+     * @returns 
+     * @memberof Gallery
+     */
+    value: function getInstance(_apiKey) {
       if (!Gallery._instance) {
-        Gallery._instance = new Gallery();
+        Gallery._instance = new Gallery(_apiKey);
         return Gallery._instance;
       } else {
         throw 'the class Gallery was already created';
       }
     }
+
+    /**
+     * Creates an instance of Gallery.
+     * @param {String} _apiKey 
+     * @param {any} params 
+     * @memberof Gallery
+     */
+
   }]);
 
-  function Gallery() {
+  function Gallery(_apiKey) {
+    var _this = this;
+
     _classCallCheck(this, Gallery);
 
-    this.apiRequest().then(function (data) {
-      return data;
+    console.log(_apiKey);
+    this.apiKey = _apiKey;
+    this.apiRequest(this.apiKey).then(function (data) {
+      // TemplateGallery.homeGallery(data);
+      _this.gallery(data);
     });
   }
 
   _createClass(Gallery, [{
     key: 'apiRequest',
-    value: async function apiRequest() {
+    value: async function apiRequest(_apiKey) {
       try {
-        var flickrApi = await fetch('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=12c6658dd3fc36b164fee653181086e4&text=garden&per_page=25&page=&format=json&nojsoncallback=1&auth_token=72157662469806357-7999e1dbe0d1fb6c&api_sig=6191a1acee2b8e4374ec6afd94a7ce60');
-        var data = await flickrApi.json();
-        _gallery_template2.default.homeGallery(data);
-        return data;
+        var flickrApi = await fetch('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + _apiKey + '&text=garden&per_page=25&page=&format=json&nojsoncallback=1');
+        var _data2 = await flickrApi.json();
+        return _data2;
       } catch (e) {
         return e;
       }
+    }
+  }, {
+    key: 'gallery',
+    value: function gallery(_data) {
+      var gallery = data.photos.photo;
+      // const photos = await fetch();
+      gallery.map(function (photo) {
+        console.log(photo.id);
+      });
     }
   }]);
 
@@ -80,11 +107,16 @@ var TemplateGallery = function () {
       var printContainer = document.querySelector('.gallery ul');
       // let template = `<h1>Hello</h1>`;
 
-      var template = data.map(function (x) {
-        return console.log(data);
-      });
+      // const template = data.map(x => console.log(data));
 
-      printContainer.insertAdjacentHTML('beforeend', template);
+
+      // printContainer.insertAdjacentHTML('beforeend', template.id)
+      // photos.forEach(element => {
+      //   console.log(element);
+      // });
+      // console.log(data);
+
+      // printContainer.insertAdjacentHTML('beforeend', template);
     }
   }]);
 
@@ -104,7 +136,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // waiting for the page loading
 window.addEventListener('load', function () {
-    var galleryApp = _gallery2.default.getInstance();
+
+    // API KEY
+    var apiKey = "a31291fbb92c2078dc081e40fa6ab76c";
+    // Initiating Gallery
+    var galleryApp = _gallery2.default.getInstance(apiKey);
 });
 
 },{"./gallery":1}]},{},[3]);
