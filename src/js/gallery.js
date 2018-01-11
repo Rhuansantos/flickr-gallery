@@ -3,7 +3,8 @@ export default class Gallery {
   /**
    * @static
    * @param {String} _apiKey 
-   * @returns 
+   * @returns the instance
+   * Singleton design pattern
    * @memberof Gallery
    */
   static getInstance(_apiKey, _search) {
@@ -22,10 +23,11 @@ export default class Gallery {
    * @memberof Gallery
   */
   constructor(_apiKey, _search) {
-    this.apiKey = _apiKey;
+    // Global configuration
+    this.apiKey = `&api_key=${_apiKey}`;
     this.searchInput = _search;
-    this.format = 'json&nojsoncallback=1'; // default format JSON
-    this.search();
+    this.format = '&format=json&nojsoncallback=1'; // default format JSON
+    this.search(); // Default function
   }
 /**
  * @param {API Methods} _method 
@@ -37,7 +39,8 @@ async apiRequest(_method, ..._params) {
     params.push(..._params);
     const apiParams = params.join('');
     try {
-      const flickrApi = await fetch(`https://api.flickr.com/services/rest/?method=${_method}&api_key=${this.apiKey}${apiParams}&format=${this.format}`);
+      const flickrApi = await fetch(`
+      https://api.flickr.com/services/rest/?method=${_method}${this.apiKey}${apiParams}${this.format}`);
       const data = await flickrApi.json();
       return data;
     } catch (e) {
@@ -47,7 +50,13 @@ async apiRequest(_method, ..._params) {
 
   async search() {
     // Method, ...params
-    const searchRequest = await this.apiRequest('flickr.photos.search', `&text=${this.searchInput}`, '&per_page=25', '&safe_search=3');
+    // params reference https://www.flickr.com/services/api/flickr.photos.search.html
+    const searchRequest = await this.apiRequest(
+      'flickr.photos.search', 
+      `&text=${this.searchInput}`, 
+      '&per_page=25', 
+      '&safe_search=3'
+    );
     const photos = searchRequest.photos.photo;
     const gallery = [];
     

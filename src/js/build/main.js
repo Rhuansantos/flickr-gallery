@@ -22,7 +22,8 @@ var Gallery = function () {
     /**
      * @static
      * @param {String} _apiKey 
-     * @returns 
+     * @returns the instance
+     * Singleton design pattern
      * @memberof Gallery
      */
     value: function getInstance(_apiKey, _search) {
@@ -45,10 +46,11 @@ var Gallery = function () {
   function Gallery(_apiKey, _search) {
     _classCallCheck(this, Gallery);
 
-    this.apiKey = _apiKey;
+    // Global configuration
+    this.apiKey = '&api_key=' + _apiKey;
     this.searchInput = _search;
-    this.format = 'json&nojsoncallback=1'; // default format JSON
-    this.search();
+    this.format = '&format=json&nojsoncallback=1'; // default format JSON
+    this.search(); // Default function
   }
   /**
    * @param {API Methods} _method 
@@ -69,7 +71,7 @@ var Gallery = function () {
       params.push.apply(params, _params);
       var apiParams = params.join('');
       try {
-        var flickrApi = await fetch('https://api.flickr.com/services/rest/?method=' + _method + '&api_key=' + this.apiKey + apiParams + '&format=' + this.format);
+        var flickrApi = await fetch('\n      https://api.flickr.com/services/rest/?method=' + _method + this.apiKey + apiParams + this.format);
         var data = await flickrApi.json();
         return data;
       } catch (e) {
@@ -82,6 +84,7 @@ var Gallery = function () {
       var _this = this;
 
       // Method, ...params
+      // params reference https://www.flickr.com/services/api/flickr.photos.search.html
       var searchRequest = await this.apiRequest('flickr.photos.search', '&text=' + this.searchInput, '&per_page=25', '&safe_search=3');
       var photos = searchRequest.photos.photo;
       var gallery = [];
@@ -120,17 +123,13 @@ var TemplateGallery = function () {
     value: function home(_data) {
       console.log('function loaded');
       var printContainer = document.querySelector('.gallery ul');
-      // let template = `<h1>Hello</h1>`;
-
-      // const template = data.map(x => console.log(data));
+      // let template = `<img src="${}"/>`;
 
       console.log(_data);
 
-      // printContainer.insertAdjacentHTML('beforeend', template.id)
-      // photos.forEach(element => {
-      //   console.log(element);
-      // });
-      // console.log(data);
+      _data.map(function (pictures) {
+        console.log(pictures);
+      });
 
       // printContainer.insertAdjacentHTML('beforeend', template);
     }
