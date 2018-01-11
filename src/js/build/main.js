@@ -22,13 +22,12 @@ var Gallery = function () {
     /**
      * @static
      * @param {String} _apiKey 
-     * @param {any} params 
      * @returns 
      * @memberof Gallery
      */
-    value: function getInstance(_apiKey) {
+    value: function getInstance(_apiKey, _search) {
       if (!Gallery._instance) {
-        Gallery._instance = new Gallery(_apiKey);
+        Gallery._instance = new Gallery(_apiKey, _search);
         return Gallery._instance;
       } else {
         throw 'the class Gallery was already created';
@@ -38,44 +37,60 @@ var Gallery = function () {
     /**
      * Creates an instance of Gallery.
      * @param {String} _apiKey 
-     * @param {any} params 
      * @memberof Gallery
-     */
+    */
 
   }]);
 
-  function Gallery(_apiKey) {
-    var _this = this;
-
+  function Gallery(_apiKey, _search) {
     _classCallCheck(this, Gallery);
 
-    console.log(_apiKey);
     this.apiKey = _apiKey;
-    this.apiRequest(this.apiKey).then(function (data) {
-      // TemplateGallery.homeGallery(data);
-      _this.gallery(data);
-    });
+    this.searchInput = _search;
+    this.format = 'json&nojsoncallback=1'; // default format JSON
+    this.search();
   }
+  /**
+   * @param {API Methods} _method 
+   * @param {any parameters from the API} _params 
+   * @return data from the call
+   */
+
 
   _createClass(Gallery, [{
     key: 'apiRequest',
-    value: async function apiRequest(_apiKey) {
+    value: async function apiRequest(_method) {
+      var params = [];
+
+      for (var _len = arguments.length, _params = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        _params[_key - 1] = arguments[_key];
+      }
+
+      params.push.apply(params, _params);
+      var apiParams = params.join('');
       try {
-        var flickrApi = await fetch('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=' + _apiKey + '&text=garden&per_page=25&page=&format=json&nojsoncallback=1');
-        var _data2 = await flickrApi.json();
-        return _data2;
+        var flickrApi = await fetch('https://api.flickr.com/services/rest/?method=' + _method + '&api_key=' + this.apiKey + apiParams + '&format=' + this.format);
+        var data = await flickrApi.json();
+        return data;
       } catch (e) {
         return e;
       }
     }
   }, {
-    key: 'gallery',
-    value: function gallery(_data) {
-      var gallery = data.photos.photo;
-      // const photos = await fetch();
-      gallery.map(function (photo) {
-        console.log(photo.id);
+    key: 'search',
+    value: async function search() {
+      var _this = this;
+
+      // Method, ...params
+      var searchRequest = await this.apiRequest('flickr.photos.search', '&text=' + this.searchInput, '&per_page=25', '&safe_search=3');
+      var photos = searchRequest.photos.photo;
+      var gallery = [];
+
+      photos.map(async function (p) {
+        var photoRequest = await _this.apiRequest('flickr.photos.getSizes', '&photo_id=' + p.id);
+        gallery.push(photoRequest.sizes.size[8].source);
       });
+      _gallery_template2.default.home(gallery);
     }
   }]);
 
@@ -101,14 +116,15 @@ var TemplateGallery = function () {
   }
 
   _createClass(TemplateGallery, null, [{
-    key: 'homeGallery',
-    value: function homeGallery(data) {
+    key: 'home',
+    value: function home(_data) {
       console.log('function loaded');
       var printContainer = document.querySelector('.gallery ul');
       // let template = `<h1>Hello</h1>`;
 
       // const template = data.map(x => console.log(data));
 
+      console.log(_data);
 
       // printContainer.insertAdjacentHTML('beforeend', template.id)
       // photos.forEach(element => {
@@ -140,7 +156,7 @@ window.addEventListener('load', function () {
     // API KEY
     var apiKey = "a31291fbb92c2078dc081e40fa6ab76c";
     // Initiating Gallery
-    var galleryApp = _gallery2.default.getInstance(apiKey);
+    var galleryApp = _gallery2.default.getInstance(apiKey, 'cars');
 });
 
 },{"./gallery":1}]},{},[3]);

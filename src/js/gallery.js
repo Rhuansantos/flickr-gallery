@@ -3,13 +3,12 @@ export default class Gallery {
   /**
    * @static
    * @param {String} _apiKey 
-   * @param {any} params 
    * @returns 
    * @memberof Gallery
    */
-  static getInstance(_apiKey, ...params)  {
+  static getInstance(_apiKey, _search) {
     if(!Gallery._instance){
-      Gallery._instance = new Gallery(_apiKey);
+      Gallery._instance = new Gallery(_apiKey, _search);
       return Gallery._instance;
     }
     else{
@@ -17,24 +16,28 @@ export default class Gallery {
     }
   }
   
-/**
- * Creates an instance of Gallery.
- * @param {String} _apiKey 
- * @param {any} params 
- * @memberof Gallery
- */
-constructor(_apiKey, ...params) {
-    console.log(_apiKey);
+  /**
+   * Creates an instance of Gallery.
+   * @param {String} _apiKey 
+   * @memberof Gallery
+  */
+  constructor(_apiKey, _search) {
     this.apiKey = _apiKey;
-    this.apiRequest(this.apiKey).then((data) => {
-      // TemplateGallery.homeGallery(data);
-      this.gallery(data);
-    });
+    this.searchInput = _search;
+    this.format = 'json&nojsoncallback=1'; // default format JSON
+    this.search();
   }
-
-  async apiRequest(_apiKey) {
+/**
+ * @param {API Methods} _method 
+ * @param {any parameters from the API} _params 
+ * @return data from the call
+ */
+async apiRequest(_method, ..._params) {
+    const params = [];
+    params.push(..._params);
+    const apiParams = params.join('');
     try {
-      const flickrApi = await fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${_apiKey}&text=garden&per_page=25&page=&format=json&nojsoncallback=1`);
+      const flickrApi = await fetch(`https://api.flickr.com/services/rest/?method=${_method}&api_key=${this.apiKey}${apiParams}&format=${this.format}`);
       const data = await flickrApi.json();
       return data;
     } catch (e) {
@@ -42,13 +45,17 @@ constructor(_apiKey, ...params) {
     }
   }
 
-  gallery(_data){
-      const gallery = data.photos.photo;
-      // const photos = await fetch();
-      gallery.map(photo => { 
-        console.log(photo.id);
-      });
+  async search() {
+    // Method, ...params
+    const searchRequest = await this.apiRequest('flickr.photos.search', `&text=${this.searchInput}`, '&per_page=25', '&safe_search=3');
+    const photos = searchRequest.photos.photo;
+    const gallery = [];
+    
+    photos.map(async (p) =>{
+      const photoRequest = await this.apiRequest('flickr.photos.getSizes', `&photo_id=${p.id}`);
+      gallery.push(photoRequest.sizes.size[8].source);
+    });
+    TemplateGallery.home(gallery);
   }
-
 
 }
