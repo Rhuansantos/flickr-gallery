@@ -1,17 +1,11 @@
 export default class TemplateGallery {
 
-  static home(_data){
-    console.log('function loaded');
+  static home(_data) {
     const printContainer = document.querySelector('.gallery ul');
-    // let template = `<img src="${}"/>`;
-    
-    console.log(_data);
-
-    _data.map((pictures) => {
-      console.log(pictures);
+    _data.map((_pictures) => {
+      let template = `<img src="${_pictures}"/>`;
+      printContainer.insertAdjacentHTML('beforeend', template);
     });
 
-
-    // printContainer.insertAdjacentHTML('beforeend', template);
   }
 }

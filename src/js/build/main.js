@@ -86,14 +86,17 @@ var Gallery = function () {
       // Method, ...params
       // params reference https://www.flickr.com/services/api/flickr.photos.search.html
       var searchRequest = await this.apiRequest('flickr.photos.search', '&text=' + this.searchInput, '&per_page=25', '&safe_search=3');
+
       var photos = searchRequest.photos.photo;
       var gallery = [];
 
       photos.map(async function (p) {
         var photoRequest = await _this.apiRequest('flickr.photos.getSizes', '&photo_id=' + p.id);
-        gallery.push(photoRequest.sizes.size[8].source);
+        gallery.push(photoRequest.sizes.size[1].source);
+        // console.log(photoRequest.sizes.size[1].source);
+        return _gallery_template2.default.home(gallery);
       });
-      _gallery_template2.default.home(gallery);
+      // return TemplateGallery.home(gallery);
     }
   }]);
 
@@ -121,17 +124,11 @@ var TemplateGallery = function () {
   _createClass(TemplateGallery, null, [{
     key: 'home',
     value: function home(_data) {
-      console.log('function loaded');
       var printContainer = document.querySelector('.gallery ul');
-      // let template = `<img src="${}"/>`;
-
-      console.log(_data);
-
-      _data.map(function (pictures) {
-        console.log(pictures);
+      _data.map(function (_pictures) {
+        var template = '<img src="' + _pictures + '"/>';
+        printContainer.insertAdjacentHTML('beforeend', template);
       });
-
-      // printContainer.insertAdjacentHTML('beforeend', template);
     }
   }]);
 

@@ -1,4 +1,5 @@
 import TemplateGallery from './gallery_template';
+
 export default class Gallery {
   /**
    * @static
@@ -57,14 +58,17 @@ async apiRequest(_method, ..._params) {
       '&per_page=25', 
       '&safe_search=3'
     );
+
     const photos = searchRequest.photos.photo;
     const gallery = [];
     
-    photos.map(async (p) =>{
+    photos.map(async (p) => {
       const photoRequest = await this.apiRequest('flickr.photos.getSizes', `&photo_id=${p.id}`);
-      gallery.push(photoRequest.sizes.size[8].source);
+      gallery.push(photoRequest.sizes.size[1].source);
+      // console.log(photoRequest.sizes.size[1].source);
+      return TemplateGallery.home(gallery);
     });
-    TemplateGallery.home(gallery);
+    // return TemplateGallery.home(gallery);
   }
 
 }
