@@ -55,7 +55,8 @@ var Gallery = function () {
     // Global configuration
     this.apiKey = '&api_key=' + _apiKey;
     this.searchInput = _search;
-    this.format = '&format=json&nojsoncallback=1'; // default format JSON
+    this.format = '&format=json&nojsoncallback=1'; // default format 
+    this.photos = 0;
     this.search(); // Default function
   }
   /**
@@ -79,10 +80,12 @@ var Gallery = function () {
       try {
         var flickrApi = await fetch('\n      https://api.flickr.com/services/rest/?method=' + _method + this.apiKey + apiParams + this.format);
         var data = await flickrApi.json();
+        _util2.default.loading();
         if (data.stat === 'fail') {
           _gallery_template2.default.error('Ops, something went wrong :(');
+        } else {
+          return data;
         }
-        return data;
       } catch (e) {
         return e;
       }
@@ -103,15 +106,15 @@ var Gallery = function () {
           _gallery_template2.default.error('Sorry, no results found, try another keyword!');
         }
         photos.map(function (p) {
+          _this.photos++;
           var photoRequest = _this.apiRequest('flickr.photos.getSizes', '&photo_id=' + p.id).then(function (_pictures) {
-            // console.log(_pictures);
             var quality = _pictures.sizes.size.length - 1; // grab original size
             var maxSize = _pictures.sizes.size[quality].width;
             _gallery_template2.default.home(_pictures.sizes.size[quality].source, maxSize);
+          }).then(function (x) {
+            return _util2.default.loadComplete();
           });
         });
-      }).then(function (x) {
-        return _util2.default.loaded();
       });
     }
   }]);
@@ -140,7 +143,6 @@ var TemplateGallery = function () {
   _createClass(TemplateGallery, null, [{
     key: 'home',
     value: function home(_link, _size) {
-      console.log(_link, _size);
       var printContainer = document.querySelector('.gallery ul');
       var template = '\n    <li style="max-width:' + _size + 'px">\n      <div class="bg-photos" style="background-image: url(' + _link + ')"></div>\n    </li>';
       printContainer.insertAdjacentHTML('beforeend', template);
@@ -184,9 +186,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // waiting for the page loading
 window.addEventListener('load', function () {
-
     _util2.default.startTime();
-
     // API KEY
     var apiKey = "a31291fbb92c2078dc081e40fa6ab76c";
     var searchForm = document.querySelector('.searchForm').addEventListener('submit', function (e) {
@@ -222,12 +222,15 @@ var Util = function () {
     _createClass(Util, null, [{
         key: 'loading',
         value: function loading() {
-            console.log('loading');
+            var printContainer = document.querySelector('.load');
+            var template = ' \n        <div class="overlay">\n            <img src="./img/loading.gif">\n        </div>\n        ';
+            printContainer.insertAdjacentHTML('beforeend', template);
         }
     }, {
-        key: 'loaded',
-        value: function loaded() {
-            console.log('loaded');
+        key: 'loadComplete',
+        value: function loadComplete() {
+            var printContainer = document.querySelector('.load');
+            printContainer.innerHTML = null;
         }
     }, {
         key: 'startTime',

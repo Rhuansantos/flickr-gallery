@@ -5,6 +5,7 @@ nav{
     position: fixed;
     padding: 20px;
     top: 0;
+    z-index: 2;
     background: $primary-color-opacity;
 
     .searchForm{

@@ -1,10 +1,17 @@
 export default class Util {
 
     static loading () {
-        console.log('loading');
+        const printContainer = document.querySelector('.load');
+        let template = ` 
+        <div class="overlay">
+            <img src="./img/loading.gif">
+        </div>
+        `;
+        printContainer.insertAdjacentHTML('beforeend', template);
     }
-    static loaded() {
-        console.log('loaded');
+    static loadComplete() {
+        const printContainer = document.querySelector('.load');
+        printContainer.innerHTML = null;
     }
     static startTime() {
 

@@ -1,6 +1,5 @@
 export default class TemplateGallery {
   static home(_link, _size) {
-    console.log(_link, _size);
     const printContainer = document.querySelector('.gallery ul');
     let template = `
     <li style="max-width:${_size}px">

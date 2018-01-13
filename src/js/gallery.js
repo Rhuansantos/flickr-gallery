@@ -30,7 +30,8 @@ export default class Gallery {
     // Global configuration
     this.apiKey = `&api_key=${_apiKey}`;
     this.searchInput = _search;
-    this.format = '&format=json&nojsoncallback=1'; // default format JSON
+    this.format = '&format=json&nojsoncallback=1'; // default format 
+    this.photos = 0;
     this.search(); // Default function
   }
 /**
@@ -46,10 +47,12 @@ async apiRequest(_method, ..._params) {
       const flickrApi = await fetch(`
       https://api.flickr.com/services/rest/?method=${_method}${this.apiKey}${apiParams}${this.format}`);
       const data = await flickrApi.json();
+      Util.loading();
       if(data.stat === 'fail') {
         TemplateGallery.error('Ops, something went wrong :(');
+      }else{  
+        return data;
       }
-      return data;
     } catch (e) {
         return e;
     }
@@ -71,14 +74,14 @@ async apiRequest(_method, ..._params) {
         TemplateGallery.error('Sorry, no results found, try another keyword!');
       }
       photos.map(p => {
+         this.photos ++;
          const photoRequest = this.apiRequest('flickr.photos.getSizes', `&photo_id=${p.id}`)
         .then(_pictures => {
-          // console.log(_pictures);
           const quality = _pictures.sizes.size.length - 1; // grab original size
           const maxSize = _pictures.sizes.size[quality].width;
           TemplateGallery.home(_pictures.sizes.size[quality].source, maxSize);
-        });
+        }).then(x => Util.loadComplete());
       });
-    }).then(x => Util.loaded());
+    });
   }
 }
