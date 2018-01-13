@@ -875,7 +875,7 @@ var Gallery = function () {
 
   _createClass(Gallery, [{
     key: 'apiRequest',
-    value: function apiRequest(_method) {
+    value: async function apiRequest(_method) {
       var params = [];
 
       for (var _len = arguments.length, _params = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -885,8 +885,8 @@ var Gallery = function () {
       params.push.apply(params, _params);
       var apiParams = params.join('');
       try {
-        var flickrApi = fetch('\n      https://api.flickr.com/services/rest/?method=' + _method + this.apiKey + apiParams + this.format);
-        var data = flickrApi.json();
+        var flickrApi = await fetch('\n      https://api.flickr.com/services/rest/?method=' + _method + this.apiKey + apiParams + this.format);
+        var data = await flickrApi.json();
         if (data.stat === 'fail') {
           _gallery_template2.default.error('Ops, something went wrong :(');
         }

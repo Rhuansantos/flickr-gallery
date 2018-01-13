@@ -41,10 +41,10 @@ gulp.task('serve', () => {
 
 gulp.task('build', function() {
   return gulp.src(['!src/js/**', 'src/**']).pipe(minify({
-    minify: true,
+    minify: false,
     collapseWhitespace: true,
     conservativeCollapse: true,
-    minifyJS: true,
+    minifyJS: false,
     minifyCSS: true,
     getKeptComment: function (content, filePath) {
         var m = content.match(/\/\*![\s\S]*?\*\//img);
