@@ -8,7 +8,7 @@
 
 1 - clone the project through terminal or download it as a zipfile [here](https://github.com/Rhuansantos/flickr-gallery/archive/master.zip)
 
-`git clone https://github.com/Rhuansantos/flickr-gallery-app.git`
+`git clone https://github.com/Rhuansantos/flickr-gallery.git`
 
 
 2 - enter into the folder's project that you just cloned
