@@ -1,0 +1,17 @@
+body, html {
+  height: 100%;
+  font-family: Helvetica, sans-serif;
+}
+*{
+  margin: 0;
+  padding:0;
+  border: 0;
+  transition: all .3s ease-in-out;
+}
+
+*:focus {
+    outline: none;
+}
+
+a:link    { color: white; text-decoration: none }
+a:visited { color: white; text-decoration: none }

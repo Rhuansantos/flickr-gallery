@@ -11,7 +11,7 @@ export default class Gallery {
    * if the gallery has already insert content clean it and make the new request
    */
   static getInstance(_apiKey, _search) {
-    if(!Gallery._instance){
+    if(!Gallery._instance) {
       Gallery._instance = new Gallery(_apiKey, _search);
       return Gallery._instance;
     }

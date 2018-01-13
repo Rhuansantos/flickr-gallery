@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "flickr-gallery",
   "version": "1.0.0",
   "main": "gulpfile.js",
   "devDependencies": {
@@ -18,5 +18,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Rhuan Santos"
+  "author": "Rhuan Santos",
+  "dependencies": {
+    "babel-polyfill": "^6.26.0"
+  }
 }

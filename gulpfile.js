@@ -25,7 +25,7 @@ gulp.task('es6', () => {
     .on('error', swallowError)
     .pipe(source('main.js'))
     .pipe(buffer())
-    .pipe(gulp.dest('src/js/build'));
+    .pipe(gulp.dest('src/build'));
 });
 
 gulp.task('serve', () => {
@@ -40,7 +40,7 @@ gulp.task('serve', () => {
 });
 
 gulp.task('build', function() {
-  return gulp.src(['src/**/*', '!src/js/core/', '!src/js/main.js']).pipe(minify({
+  return gulp.src(['!src/js/**', 'src/**']).pipe(minify({
     minify: true,
     collapseWhitespace: true,
     conservativeCollapse: true,
@@ -50,7 +50,7 @@ gulp.task('build', function() {
         var m = content.match(/\/\*![\s\S]*?\*\//img);
         return m && m.join('\n') + '\n' || '';
     }
-  })).pipe(gulp.dest('dist'));
+  })).pipe(gulp.dest('docs'));
 });
 
 function swallowError (error) {
