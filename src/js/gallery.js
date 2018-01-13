@@ -6,6 +6,7 @@ export default class Gallery {
    * @returns the instance
    * Singleton design pattern
    * @memberof Gallery
+   * if the gallery has already insert content clean it and make the new request
    */
   static getInstance(_apiKey, _search) {
     if(!Gallery._instance){
@@ -13,7 +14,9 @@ export default class Gallery {
       return Gallery._instance;
     }
     else{
-        throw 'the class Gallery was already created'; 
+        TemplateGallery.cleanContent();
+        Gallery._instance = new Gallery(_apiKey, _search);
+        return Gallery._instance;
     }
   }
   /**
@@ -59,7 +62,7 @@ async apiRequest(_method, ..._params) {
       const photos = res.photos.photo;
       photos.map(p => {
          const photoRequest = this.apiRequest('flickr.photos.getSizes', `&photo_id=${p.id}`)
-         .then(_pictures => TemplateGallery.home(_pictures.sizes.size[1].source));
+         .then(_pictures => TemplateGallery.home(_pictures.sizes.size[5].source));
       });
     }); 
   }

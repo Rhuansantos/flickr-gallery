@@ -25,13 +25,16 @@ var Gallery = function () {
      * @returns the instance
      * Singleton design pattern
      * @memberof Gallery
+     * if the gallery has already insert content clean it and make the new request
      */
     value: function getInstance(_apiKey, _search) {
       if (!Gallery._instance) {
         Gallery._instance = new Gallery(_apiKey, _search);
         return Gallery._instance;
       } else {
-        throw 'the class Gallery was already created';
+        _gallery_template2.default.cleanContent();
+        Gallery._instance = new Gallery(_apiKey, _search);
+        return Gallery._instance;
       }
     }
     /**
@@ -89,7 +92,7 @@ var Gallery = function () {
         var photos = res.photos.photo;
         photos.map(function (p) {
           var photoRequest = _this.apiRequest('flickr.photos.getSizes', '&photo_id=' + p.id).then(function (_pictures) {
-            return _gallery_template2.default.home(_pictures.sizes.size[1].source);
+            return _gallery_template2.default.home(_pictures.sizes.size[5].source);
           });
         });
       });
@@ -124,6 +127,12 @@ var TemplateGallery = function () {
       var template = '<img src="' + _data + '"/>';
       printContainer.insertAdjacentHTML('beforeend', template);
     }
+  }, {
+    key: 'cleanContent',
+    value: function cleanContent() {
+      var printContainer = document.querySelector('.gallery ul');
+      printContainer.innerHTML = null;
+    }
   }]);
 
   return TemplateGallery;
@@ -142,11 +151,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // waiting for the page loading
 window.addEventListener('load', function () {
-
     // API KEY
     var apiKey = "a31291fbb92c2078dc081e40fa6ab76c";
-    // Initiating Gallery
-    var galleryApp = _gallery2.default.getInstance(apiKey, 'cars');
+
+    // const searchInput = document.querySelector('.search').submit();
+
+    // console.log(searchInput);
+    var searchForm = document.querySelector('.searchForm');
+    searchForm.addEventListener('submit', function (e) {
+        var searchInput = document.querySelector('.searchInput').value;
+        e.preventDefault();
+        console.log(searchInput);
+        // alert('ok');
+
+        var galleryApp = _gallery2.default.getInstance(apiKey, searchInput);
+    });
 });
 
 },{"./gallery":1}]},{},[3]);
