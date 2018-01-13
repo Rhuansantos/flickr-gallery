@@ -1,5 +1,5 @@
 # Photo Search Gallery
-> A search photo gallery with vanilha Javascript, using es6,es7 features and the Flickr Api!
+> A search photo gallery with vanilla Javascript, using es6,es7 features and the Flickr Api!
 
 
 [live example](https://rhuansantos.github.io/flickr-gallery/index.html)
