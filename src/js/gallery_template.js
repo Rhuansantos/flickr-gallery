@@ -1,9 +1,10 @@
 export default class TemplateGallery {
-  static home(_data) {
+  static home(_link, _size) {
+    console.log(_link, _size);
     const printContainer = document.querySelector('.gallery ul');
     let template = `
-    <li>
-      <div class="bg-photos" style="background-image: url(${_data})"></div>
+    <li style="max-width:${_size}px">
+      <div class="bg-photos" style="background-image: url(${_link})"></div>
     </li>`
     ;
     printContainer.insertAdjacentHTML('beforeend', template);

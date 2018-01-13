@@ -3,14 +3,11 @@ import Util from './util';
 import TemplateGallery from './gallery_template';
 
 
-
-
-
 // waiting for the page loading
 window.addEventListener('load',() => {
 
     Util.startTime();
-    
+
     // API KEY
     const apiKey = "a31291fbb92c2078dc081e40fa6ab76c";
     const searchForm = document.querySelector('.searchForm')

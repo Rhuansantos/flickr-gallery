@@ -104,8 +104,10 @@ var Gallery = function () {
         }
         photos.map(function (p) {
           var photoRequest = _this.apiRequest('flickr.photos.getSizes', '&photo_id=' + p.id).then(function (_pictures) {
+            // console.log(_pictures);
             var quality = _pictures.sizes.size.length - 1; // grab original size
-            _gallery_template2.default.home(_pictures.sizes.size[quality].source);
+            var maxSize = _pictures.sizes.size[quality].width;
+            _gallery_template2.default.home(_pictures.sizes.size[quality].source, maxSize);
           });
         });
       }).then(function (x) {
@@ -137,9 +139,10 @@ var TemplateGallery = function () {
 
   _createClass(TemplateGallery, null, [{
     key: 'home',
-    value: function home(_data) {
+    value: function home(_link, _size) {
+      console.log(_link, _size);
       var printContainer = document.querySelector('.gallery ul');
-      var template = '\n    <li>\n      <div class="bg-photos" style="background-image: url(' + _data + ')"></div>\n    </li>';
+      var template = '\n    <li style="max-width:' + _size + 'px">\n      <div class="bg-photos" style="background-image: url(' + _link + ')"></div>\n    </li>';
       printContainer.insertAdjacentHTML('beforeend', template);
     }
   }, {

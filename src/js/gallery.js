@@ -73,8 +73,10 @@ async apiRequest(_method, ..._params) {
       photos.map(p => {
          const photoRequest = this.apiRequest('flickr.photos.getSizes', `&photo_id=${p.id}`)
         .then(_pictures => {
+          // console.log(_pictures);
           const quality = _pictures.sizes.size.length - 1; // grab original size
-          TemplateGallery.home(_pictures.sizes.size[quality].source);
+          const maxSize = _pictures.sizes.size[quality].width;
+          TemplateGallery.home(_pictures.sizes.size[quality].source, maxSize);
         });
       });
     }).then(x => Util.loaded());
