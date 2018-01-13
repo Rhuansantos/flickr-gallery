@@ -1,16 +1,34 @@
+
+
+.bg-photos { 
+    min-height: 100vh; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    image-rendering: pixelated;
+}
+
+// Display 1
 .gallery{
-    margin-top: 130px;
+    // margin-top: 130px;
+    min-width: 100%;
+    min-height: 100%;
     ul{
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: baseline;
-        align-content: space-between;
+        min-width: 100%;
+        min-height: 100vh;
+
+
+        // display: flex;
+        // flex-wrap: wrap;
+        // justify-content: space-around;
+        // align-items: baseline;
+        // align-content: space-between;
         li{
-            width: 30%;
-            height: 200px;
-            margin-bottom: 50px;
-            background: blueviolet;
+            // width: 30%;
+            // height: 200px;
+            min-width: 100%;
+            min-height: 100%;
+
             list-style-type: none;
         }
     }

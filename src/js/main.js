@@ -1,21 +1,26 @@
 import Gallery from './gallery';
+import Util from 'util';
+import TemplateGallery from './gallery_template';
 
 // waiting for the page loading
 window.addEventListener('load',() => {
+
+    const data = new Date();
+    console.log(data);
     // API KEY
     const apiKey = "a31291fbb92c2078dc081e40fa6ab76c";
-
-    // const searchInput = document.querySelector('.search').submit();
-
-    // console.log(searchInput);
-    const searchForm = document.querySelector('.searchForm');
-    searchForm.addEventListener('submit', (e) => {
-        const searchInput = document.querySelector('.searchInput').value;
+    const searchForm = document.querySelector('.searchForm')
+    .addEventListener('submit', (e) => {
         e.preventDefault();
-        console.log(searchInput);
-        // alert('ok');
-
-        const galleryApp = Gallery.getInstance(apiKey, searchInput);
+        const searchInput = document.querySelector('.searchInput').value;
+        if(searchInput !== ''){
+            TemplateGallery.cleanContent();
+            const galleryApp = Gallery.getInstance(apiKey, searchInput);
+        }else{
+            TemplateGallery.cleanContent();
+            let emoji = String.fromCodePoint(0x1F605);
+            TemplateGallery.error(`Don't be shy! just type on the search ${emoji}`);
+        }     
     });
 
 });

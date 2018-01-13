@@ -1,14 +1,33 @@
 nav{
     width: 100%;
-    height: 80px;
+    height: 35px;
     overflow: hidden;
     position: fixed;
+    padding: 20px;
     top: 0;
-    background: $primary-color;
+    background: $primary-color-opacity;
     input{
-
-        button{
-            padding: 20px;
+        width: 50%;
+        padding: 10px;
+        font-size: 18px;
+        margin: 0 auto;
+        background: #FDFFFC;
+        border-radius: 3px;
+    }
+    button{
+        min-width: 10%;
+        padding: 10px;
+        font-size: 18px;
+        background: #FDFFFC;
+        border-radius: 3px;
+        text-transform: uppercase;
+        &:hover {
+            background-color: $secondary-color;
+            cursor: pointer;
+            span{
+                color: white;
+                margin-left: 10px;
+            }
         }
     }
 }

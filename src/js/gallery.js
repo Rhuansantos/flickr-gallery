@@ -1,4 +1,6 @@
 import TemplateGallery from './gallery_template';
+import Util from './util';
+
 export default class Gallery {
   /**
    * @static
@@ -44,6 +46,9 @@ async apiRequest(_method, ..._params) {
       const flickrApi = await fetch(`
       https://api.flickr.com/services/rest/?method=${_method}${this.apiKey}${apiParams}${this.format}`);
       const data = await flickrApi.json();
+      if(data.stat === 'fail') {
+        TemplateGallery.error('Ops, something went wrong :(');
+      }
       return data;
     } catch (e) {
         return e;
@@ -57,13 +62,21 @@ async apiRequest(_method, ..._params) {
       'flickr.photos.search', 
       `&text=${this.searchInput}`, 
       '&per_page=25', 
-      '&safe_search=3'
+      '&safe_search=3',
+      '&content_type=1'
+      // '&page=10'
     ).then((res) => {
       const photos = res.photos.photo;
+      if(photos.length === 0) {
+        TemplateGallery.error('Sorry, no results found, try another keyword!');
+      }
       photos.map(p => {
          const photoRequest = this.apiRequest('flickr.photos.getSizes', `&photo_id=${p.id}`)
-         .then(_pictures => TemplateGallery.home(_pictures.sizes.size[5].source));
+        .then(_pictures => {
+          const quality = _pictures.sizes.size.length - 1; // grab original size
+          TemplateGallery.home(_pictures.sizes.size[quality].source);
+        });
       });
-    }); 
+    }).then(x => Util.loaded());
   }
 }

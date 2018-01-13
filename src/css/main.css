@@ -1,7 +1,12 @@
+body, html {
+  height: 100%;
+  font-family: Helvetica, sans-serif; }
+
 * {
   margin: 0;
   padding: 0;
-  border: 0; }
+  border: 0;
+  transition: all .3s ease-in-out; }
 
 *:focus {
   outline: none; }
@@ -14,27 +19,63 @@ a:visited {
   color: white;
   text-decoration: none; }
 
+.alert-no-results {
+  font-size: 26px;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  top: 200px; }
+
 nav {
   width: 100%;
-  height: 80px;
+  height: 35px;
   overflow: hidden;
   position: fixed;
+  padding: 20px;
   top: 0;
-  background: black; }
-  nav input button {
-    padding: 20px; }
+  background: rgba(1, 22, 39, 0.8); }
+  nav input {
+    width: 50%;
+    padding: 10px;
+    font-size: 18px;
+    margin: 0 auto;
+    background: #FDFFFC;
+    border-radius: 3px; }
+  nav button {
+    min-width: 10%;
+    padding: 10px;
+    font-size: 18px;
+    background: #FDFFFC;
+    border-radius: 3px;
+    text-transform: uppercase; }
+    nav button:hover {
+      background-color: #2EC4B6;
+      cursor: pointer; }
+      nav button:hover span {
+        color: white;
+        margin-left: 10px; }
+
+footer {
+  width: 100%;
+  height: 30px;
+  position: fixed;
+  background: rgba(1, 22, 39, 0.8);
+  bottom: 0; }
+
+.bg-photos {
+  min-height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  image-rendering: pixelated; }
 
 .gallery {
-  margin-top: 130px; }
+  min-width: 100%;
+  min-height: 100%; }
   .gallery ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: baseline;
-    align-content: space-between; }
+    min-width: 100%;
+    min-height: 100vh; }
     .gallery ul li {
-      width: 30%;
-      height: 200px;
-      margin-bottom: 50px;
-      background: blueviolet;
+      min-width: 100%;
+      min-height: 100%;
       list-style-type: none; }
