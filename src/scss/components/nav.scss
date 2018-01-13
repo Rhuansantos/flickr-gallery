@@ -8,7 +8,7 @@ nav{
     background: $primary-color-opacity;
 
     .searchForm{
-        width: 80%;
+        min-width: 80%;
         float: left;
         input{
             min-width: 60%;
