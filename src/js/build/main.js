@@ -34,7 +34,6 @@ var Gallery = function () {
         throw 'the class Gallery was already created';
       }
     }
-
     /**
      * Creates an instance of Gallery.
      * @param {String} _apiKey 
@@ -80,23 +79,20 @@ var Gallery = function () {
     }
   }, {
     key: 'search',
-    value: async function search() {
+    value: function search() {
       var _this = this;
 
       // Method, ...params
       // params reference https://www.flickr.com/services/api/flickr.photos.search.html
-      var searchRequest = await this.apiRequest('flickr.photos.search', '&text=' + this.searchInput, '&per_page=25', '&safe_search=3');
-
-      var photos = searchRequest.photos.photo;
       var gallery = [];
-
-      photos.map(async function (p) {
-        var photoRequest = await _this.apiRequest('flickr.photos.getSizes', '&photo_id=' + p.id);
-        gallery.push(photoRequest.sizes.size[1].source);
-        // console.log(photoRequest.sizes.size[1].source);
-        return _gallery_template2.default.home(gallery);
+      this.apiRequest('flickr.photos.search', '&text=' + this.searchInput, '&per_page=25', '&safe_search=3').then(function (res) {
+        var photos = res.photos.photo;
+        photos.map(function (p) {
+          var photoRequest = _this.apiRequest('flickr.photos.getSizes', '&photo_id=' + p.id).then(function (_pictures) {
+            return _gallery_template2.default.home(_pictures.sizes.size[1].source);
+          });
+        });
       });
-      // return TemplateGallery.home(gallery);
     }
   }]);
 
@@ -125,10 +121,8 @@ var TemplateGallery = function () {
     key: 'home',
     value: function home(_data) {
       var printContainer = document.querySelector('.gallery ul');
-      _data.map(function (_pictures) {
-        var template = '<img src="' + _pictures + '"/>';
-        printContainer.insertAdjacentHTML('beforeend', template);
-      });
+      var template = '<img src="' + _data + '"/>';
+      printContainer.insertAdjacentHTML('beforeend', template);
     }
   }]);
 

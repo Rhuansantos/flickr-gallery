@@ -1,5 +1,4 @@
 import TemplateGallery from './gallery_template';
-
 export default class Gallery {
   /**
    * @static
@@ -17,7 +16,6 @@ export default class Gallery {
         throw 'the class Gallery was already created'; 
     }
   }
-  
   /**
    * Creates an instance of Gallery.
    * @param {String} _apiKey 
@@ -48,27 +46,21 @@ async apiRequest(_method, ..._params) {
         return e;
     }
   }
-
-  async search() {
+  search() {
     // Method, ...params
     // params reference https://www.flickr.com/services/api/flickr.photos.search.html
-    const searchRequest = await this.apiRequest(
+    const gallery = [];
+    this.apiRequest(
       'flickr.photos.search', 
       `&text=${this.searchInput}`, 
       '&per_page=25', 
       '&safe_search=3'
-    );
-
-    const photos = searchRequest.photos.photo;
-    const gallery = [];
-    
-    photos.map(async (p) => {
-      const photoRequest = await this.apiRequest('flickr.photos.getSizes', `&photo_id=${p.id}`);
-      gallery.push(photoRequest.sizes.size[1].source);
-      // console.log(photoRequest.sizes.size[1].source);
-      return TemplateGallery.home(gallery);
-    });
-    // return TemplateGallery.home(gallery);
+    ).then((res) => {
+      const photos = res.photos.photo;
+      photos.map(p => {
+         const photoRequest = this.apiRequest('flickr.photos.getSizes', `&photo_id=${p.id}`)
+         .then(_pictures => TemplateGallery.home(_pictures.sizes.size[1].source));
+      });
+    }); 
   }
-
 }
