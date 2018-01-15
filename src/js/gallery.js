@@ -71,6 +71,7 @@ async apiRequest(_method, ..._params) {
     ).then((res) => {
       const photos = res.photos.photo;
       if(photos.length === 0) {
+        Util.loadComplete();
         TemplateGallery.error('Sorry, no results found, try another keyword!');
       }
       photos.map(p => {

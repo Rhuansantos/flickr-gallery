@@ -103,6 +103,7 @@ var Gallery = function () {
       ).then(function (res) {
         var photos = res.photos.photo;
         if (photos.length === 0) {
+          _util2.default.loadComplete();
           _gallery_template2.default.error('Sorry, no results found, try another keyword!');
         }
         photos.map(function (p) {
